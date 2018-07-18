@@ -7,11 +7,21 @@
 
 toc::[]
 
-[[About]]
+[[about]]
 == About
+This pipeline automates build, test and publish processes of CDK.
+By default the pipeline will run on nightly basis and without concurrency, e.g. 1 running instance at the time.
 
-[[Quickstart]]
-== Quickstart
+[[running]]
+== Running the pipeline
+Pipeline uses several pre-filled parameters, these are:
 
-[[Contribute]]
+- *BUILD_TYPE*: choice of nightly or release, nightly uploads bits to builds/nightly while release to builds/weekly on the artifact server.
+- *RELEASE_NAME*: NONE for nightly runs, alpha1/alpha2/rc2 etc. for release runs.	
+- *BRANCH*: master by default, release branch for release.
+- *ISO_BRANCH*: master by default.
+- *QUICK_TEST*: select to run only smallest fraction of tests.
+
+[[contribute]]
 == Contribute
+To make a change to the pipeline, please create a PR to this repository.
