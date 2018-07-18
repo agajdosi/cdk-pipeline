@@ -27,24 +27,26 @@ def prepare_unix() {
 // QUICK TESTS
 if (env.QUICK_TEST == "true") {
     cciRhelTags=[
-        ['cmd-version','setup-cdk','not-exist'],
-        ['cmd-version','lie','todo']]
+        ['cmd-version','setup-cdk','basic']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
             retry(2){ build("tests-rhel7/_prepare")},
-            retry(2){ build("tests-rhel7/basic.feature")}]
+            retry(2){ build("tests-rhel7/basic.feature")},
+            retry(2){ build("tests-rhel7/cmd-version.feature")}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
         stage('blr-win7-smoke'){[
             retry(2){ build("tests-win7/_prepare")},
-            retry(2){ build("tests-win7/basic.feature")}]
+            retry(2){ build("tests-win7/basic.feature")},
+            retry(2){ build("tests-win7/cmd-version.feature")}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
         stage('blr-mac10-smoke'){[
             retry(2){ build("tests-mac10/_prepare")},
-            retry(2){ build("tests-mac10/basic.feature")}]
+            retry(2){ build("tests-mac10/basic.feature")},
+            retry(2){ build("tests-mac10/cmd-version.feature")}]
         }
     }
 // FULL TESTS
@@ -149,13 +151,17 @@ pipeline {
     agent none
     parameters {
         choice(choices: 'nightly\nweekly', description: 'Nightly by default, weekly sometimes.', name: 'BUILD_TYPE')
-        string(defaultValue: '', description: '	Name of the release (alpha2, beta0 .. etc), empty for nightly.', name: 'RELEASE_NAME')
+        string(defaultValue: 'NONE', description: 'Name of the release (alpha2, beta0 .. etc), empty for nightly.', name: 'RELEASE_NAME')
         string(defaultValue: 'master', description: 'Release branch', name: 'BRANCH')
-        string(defaultValue: 'master', description: '	Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
+        string(defaultValue: 'master', description: 'Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
         booleanParam(defaultValue: false, description: "To speed up things a little bit when it's needed...", name: 'QUICK_TEST')
+    }
+    triggers {
+        cron("H 18 * * 1-5")
     }
     options {
         timestamps()
+        disableConcurrentBuilds()
     }
     stages {
 
