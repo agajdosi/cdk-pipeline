@@ -148,10 +148,10 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
 pipeline {
     agent none
     parameters {
-        choice(choices: 'nightly\nweekly', description: 'Nightly by default, weekly sometimes.', name: 'BUILD_TYPE'),
-        string(defaultValue: '', description: '	Name of the release (alpha2, beta0 .. etc), empty for nightly.', name: 'RELEASE_NAME'),
-        string(defaultValue: 'master', description: 'Release branch', name: 'BRANCH'),
-        string(defaultValue: 'master', description: '	Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH'),
+        choice(choices: 'nightly\nweekly', description: 'Nightly by default, weekly sometimes.', name: 'BUILD_TYPE')
+        string(defaultValue: '', description: '	Name of the release (alpha2, beta0 .. etc), empty for nightly.', name: 'RELEASE_NAME')
+        string(defaultValue: 'master', description: 'Release branch', name: 'BRANCH')
+        string(defaultValue: 'master', description: '	Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
         booleanParam(defaultValue: false, description: "To speed up things a little bit when it's needed...", name: 'QUICK_TEST')
     }
     options {
