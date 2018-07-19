@@ -155,6 +155,7 @@ pipeline {
         string(defaultValue: 'master', description: 'Release branch', name: 'BRANCH')
         string(defaultValue: 'master', description: 'Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
         booleanParam(defaultValue: false, description: "To speed up things a little bit when it's needed...", name: 'QUICK_TEST')
+        booleanParam(defaultValue: false, description: "Will skip the ISO and CDK builds and only run tests and binary upload.", name: 'SKIP_BUILD')
     }
     triggers {
         cron("H 18 * * 1-5")
@@ -168,21 +169,31 @@ pipeline {
         stage('BUILD ISO') {
             steps {
                 script {
-                    iso_build = build(job: "cdk_iso", parameters: [
-                        string(name: 'BRANCH', value: "${ISO_BRANCH}"),
-                        string(name: 'PR_NUMBER', value: 'NONE')
-                    ])
+                    if (env.SKIP_BUILD == "false") {
+                        iso_build = build(job: "cdk_iso", parameters: [
+                            string(name: 'BRANCH', value: "${ISO_BRANCH}"),
+                            string(name: 'PR_NUMBER', value: 'NONE')
+                        ])
+                    } else {
+                        echo "ISO build skipped."
+                    }
                 }
             }
         }
     
         stage('BUILD CDK') {
             steps {
-                build job: "cdk_build", parameters: [
-                        string(name: 'ISO_URL', value: iso_build.buildVariables.iso_url),
-                        string(name: 'BRANCH', value: "${BRANCH}"),
-                        string(name: 'PR_NUMBER', value: 'NONE')
-                    ]
+                script {
+                    if (env.SKIP_BUILD == "false") {
+                        build job: "cdk_build", parameters: [
+                            string(name: 'ISO_URL', value: iso_build.buildVariables.iso_url),
+                            string(name: 'BRANCH', value: "${BRANCH}"),
+                            string(name: 'PR_NUMBER', value: 'NONE')
+                        ]
+                    } else {
+                        echo "CDK build skipped."
+                    }
+                }
             }
         }
 
