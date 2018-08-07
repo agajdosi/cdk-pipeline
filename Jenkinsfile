@@ -9,6 +9,12 @@ def clean_unix() {
     virsh destroy minishift || echo "no domain minishift"
     '''
 }
+def debug_unix() {
+    sh '''
+    rpm -qa
+    ifconfig
+    '''
+}
 def prepare_unix() {
     sh '''
     mkdir -p go/src/github.com/minishift go/bin go/pkg minishift
@@ -130,6 +136,7 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         "PATH+MINISHIFT=${WORKSPACE}/minishift",
                         "GOPATH=${WORKSPACE}/go"
                     ]){
+                        debug_unix()
                         clean_unix()
                         prepare_unix()
                         script {
