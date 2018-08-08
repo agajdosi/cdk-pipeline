@@ -11,8 +11,9 @@ def clean_unix() {
 }
 def debug_unix() {
     sh '''
-    rpm -qa
-    ifconfig
+    rpm -qa || echo "failed"
+    whoami || echo "failed"
+    ifconfig || echo "failed"
     '''
 }
 def prepare_unix() {
