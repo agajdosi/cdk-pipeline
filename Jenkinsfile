@@ -160,6 +160,7 @@ pipeline {
     parameters {
         choice(choices: 'nightly\nweekly', description: 'Nightly by default, weekly sometimes.', name: 'BUILD_TYPE')
         string(defaultValue: 'NONE', description: 'Name of the release (alpha2, beta0 .. etc), empty for nightly.', name: 'RELEASE_NAME')
+        string(defaultValue: 'https://github.com/redhat-developer/minishift.git', description: 'Fork from which build', name: 'FORK')
         string(defaultValue: 'master', description: 'Release branch', name: 'BRANCH')
         string(defaultValue: 'master', description: 'Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
         booleanParam(defaultValue: false, description: "To speed up things a little bit when it's needed...", name: 'QUICK_TEST')
@@ -195,6 +196,7 @@ pipeline {
                     if (env.SKIP_BUILD == "false") {
                         build job: "cdk_build", parameters: [
                             string(name: 'ISO_URL', value: iso_build.buildVariables.iso_url),
+                            string(name: 'FORK', value: "${FORK}"),
                             string(name: 'BRANCH', value: "${BRANCH}"),
                             string(name: 'PR_NUMBER', value: 'NONE')
                         ]
