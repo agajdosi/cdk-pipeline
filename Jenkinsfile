@@ -141,6 +141,10 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         clean_unix()
                         prepare_unix()
                         script {
+                            sh '''
+                            minishift start --vcpus 7
+                            minishift delete
+                            '''
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
                                 retry(2) {
                                     sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
