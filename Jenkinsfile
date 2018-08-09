@@ -37,7 +37,7 @@ if (env.QUICK_TEST == "true") {
         ['cmd-version','setup-cdk','basic']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
-            retry(2){ build job: "tests-rhel7/_prepare"), parameters:[
+            retry(2){ build job: "tests-rhel7/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
@@ -47,7 +47,7 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-win7-smoke"] = {
         stage('blr-win7-smoke'){[
-            retry(2){ build job: "tests-win7/_prepare"), parameters:[
+            retry(2){ build job: "tests-win7/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
@@ -57,7 +57,7 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-mac10-smoke"] = {
         stage('blr-mac10-smoke'){[
-            retry(2){ build job: "tests-mac10/_prepare"), parameters:[
+            retry(2){ build job: "tests-mac10/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
@@ -74,7 +74,7 @@ if (env.QUICK_TEST == "true") {
         ['proxy','cmd-config','cmd-version','setup-cdk']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
-            retry(2){ build job: "tests-rhel7/_prepare"), parameters:[
+            retry(2){ build job: "tests-rhel7/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
@@ -95,7 +95,7 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-win7-smoke"] = {
         stage('blr-win7-smoke'){[
-            retry(2){ build job: "tests-win7/_prepare"), parameters:[
+            retry(2){ build job: "tests-win7/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
@@ -116,7 +116,7 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-mac10-smoke"] = {
         stage('blr-mac10-smoke'){[
-            retry(2){ build job: "tests-mac10/_prepare"), parameters:[
+            retry(2){ build job: "tests-mac10/_prepare", parameters:[
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
