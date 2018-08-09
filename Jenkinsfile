@@ -124,7 +124,7 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
     def a = i //to pass copy, not link
 
     integrationTests["cci-rhel7-part${a}"] = {
-        node('rhel7') {
+        node('rhel7-16gb') {
             stage("cci-rhel7-part-${a}") {
                 deleteDir()
                 withCredentials([
