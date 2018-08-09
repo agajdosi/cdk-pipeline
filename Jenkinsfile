@@ -27,7 +27,7 @@ def prepare_unix() {
     curl -k http://10.70.48.26/builds/linux-amd64/minishift -o minishift/minishift
     chmod 755 minishift/minishift
 
-    git clone --depth 0 https://$MINISHIFT_GITHUB_API_TOKEN@github.com/redhat-developer/minishift go/src/github.com/minishift/minishift
+    git clone --depth 0 --single-branch -b $BRANCH https://$MINISHIFT_GITHUB_API_TOKEN@$FORK go/src/github.com/minishift/minishift
     '''
 }
 
@@ -37,21 +37,30 @@ if (env.QUICK_TEST == "true") {
         ['cmd-version','setup-cdk','basic']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
-            retry(2){ build("tests-rhel7/_prepare")},
+            retry(2){ build job: "tests-rhel7/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             retry(2){ build("tests-rhel7/basic.feature")},
             retry(2){ build("tests-rhel7/cmd-version.feature")}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
         stage('blr-win7-smoke'){[
-            retry(2){ build("tests-win7/_prepare")},
+            retry(2){ build job: "tests-win7/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             retry(2){ build("tests-win7/basic.feature")},
             retry(2){ build("tests-win7/cmd-version.feature")}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
         stage('blr-mac10-smoke'){[
-            retry(2){ build("tests-mac10/_prepare")},
+            retry(2){ build job: "tests-mac10/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             retry(2){ build("tests-mac10/basic.feature")},
             retry(2){ build("tests-mac10/cmd-version.feature")}]
         }
@@ -65,7 +74,10 @@ if (env.QUICK_TEST == "true") {
         ['proxy','cmd-config','cmd-version','setup-cdk']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
-            retry(2){ build("tests-rhel7/_prepare")},
+            retry(2){ build job: "tests-rhel7/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             //retry(2){ build("tests-rhel7/addon-xpaas.feature")},
             retry(2){ build("tests-rhel7/basic.feature")},
             retry(2){ build("tests-rhel7/cmd-addons.feature")},
@@ -83,7 +95,10 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-win7-smoke"] = {
         stage('blr-win7-smoke'){[
-            retry(2){ build("tests-win7/_prepare")},
+            retry(2){ build job: "tests-win7/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             //retry(2){ build("tests-win7/addon-xpaas.feature")},
             retry(2){ build("tests-win7/basic.feature")},
             retry(2){ build("tests-win7/cmd-addons.feature")},
@@ -101,7 +116,10 @@ if (env.QUICK_TEST == "true") {
     }
     integrationTests["blr-mac10-smoke"] = {
         stage('blr-mac10-smoke'){[
-            retry(2){ build("tests-mac10/_prepare")},
+            retry(2){ build job: "tests-mac10/_prepare"), parameters:[
+                string(name: 'FORK', value: "${FORK}"),
+                string(name: 'BRANCH', value: "${BRANCH}")
+            ]},
             //retry(2){ build("tests-mac10/addon-xpaas.feature")},
             retry(2){ build("tests-mac10/basic.feature")},
             retry(2){ build("tests-mac10/cmd-addons.feature")},
@@ -135,14 +153,16 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                     withEnv([
                         "PATH+GO=${WORKSPACE}/go/bin",
                         "PATH+MINISHIFT=${WORKSPACE}/minishift",
-                        "GOPATH=${WORKSPACE}/go"
+                        "GOPATH=${WORKSPACE}/go",
+                        "FORK=${FORK}",
+                        "BRANCH=${BRANCH}"
                     ]){
                         debug_unix()
                         clean_unix()
                         prepare_unix()
                         script {
                             sh '''
-                            minishift start --vcpus 7
+                            minishift start --cpus 7
                             minishift delete
                             '''
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
