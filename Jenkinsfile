@@ -162,6 +162,7 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         prepare_unix()
                         script {
                             sh '''
+                            minishift setup-cdk --force
                             minishift start --cpus 7
                             minishift delete
                             '''
