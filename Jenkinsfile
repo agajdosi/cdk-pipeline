@@ -155,7 +155,9 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         "PATH+MINISHIFT=${WORKSPACE}/minishift",
                         "GOPATH=${WORKSPACE}/go",
                         "FORK=${FORK}",
-                        "BRANCH=${BRANCH}"
+                        "BRANCH=${BRANCH}",
+                        "MINISHIFT_CPUS=7",
+                        "MINISHIFT_MEMORY=12gb"
                     ]){
                         debug_unix()
                         clean_unix()
@@ -163,8 +165,8 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         script {
                             sh '''
                             minishift setup-cdk --force
-                            minishift start --cpus 7
-                            minishift delete
+                            minishift start --cpus 7 --memory 12gb
+                            minishift delete --force
                             '''
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
                                 retry(2) {
