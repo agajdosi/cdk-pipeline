@@ -121,7 +121,7 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
             //retry(2){ build("tests-mac10/addon-xpaas.feature")},
-            retry(2){ build("tests-mac10/basic.feature")},
+            //retry(2){ build("tests-mac10/basic.feature")},
             retry(2){ build("tests-mac10/cmd-addons.feature")},
             //retry(2){ build("tests-mac10/cmd-config.feature")},
             retry(2){ build("tests-mac10/cmd-docker-env.feature")},
