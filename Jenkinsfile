@@ -41,8 +41,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            retry(2){ build("tests-rhel7/basic.feature")},
-            retry(2){ build("tests-rhel7/cmd-version.feature")}]
+            catchError{retry(2){ build("tests-rhel7/basic.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
@@ -51,8 +51,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            retry(2){ build("tests-win7/basic.feature")},
-            retry(2){ build("tests-win7/cmd-version.feature")}]
+            catchError{retry(2){ build("tests-win7/basic.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-version.feature")}}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
@@ -61,8 +61,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            retry(2){ build("tests-mac10/basic.feature")},
-            retry(2){ build("tests-mac10/cmd-version.feature")}]
+            catchError{retry(2){ build("tests-mac10/basic.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}}]
         }
     }
 // FULL TESTS
@@ -78,19 +78,19 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            //retry(2){ build("tests-rhel7/addon-xpaas.feature")},
-            retry(2){ build("tests-rhel7/basic.feature")},
-            retry(2){ build("tests-rhel7/cmd-addons.feature")},
-            retry(2){ build("tests-rhel7/cmd-config.feature")},
-            retry(2){ build("tests-rhel7/cmd-docker-env.feature")},
-            //retry(2){ build("tests-rhel7/cmd-image.feature")},
-            retry(2){ build("tests-rhel7/cmd-oc-env.feature")},
-            retry(2){ build("tests-rhel7/cmd-openshift.feature")},
-            retry(2){ build("tests-rhel7/cmd-profile.feature")},
-            retry(2){ build("tests-rhel7/cmd-version.feature")},
-            retry(2){ build("tests-rhel7/flags.feature")},
-            retry(2){ build("tests-rhel7/provision-various-versions.feature")},
-            retry(2){ build("tests-rhel7/proxy.feature")}]
+            //catchError{retry(2){ build("tests-rhel7/addon-xpaas.feature")}},
+            catchError{retry(2){ build("tests-rhel7/basic.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-addons.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-config.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-docker-env.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-image.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-oc-env.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-openshift.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-profile.feature")}},
+            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-rhel7/flags.feature")}},
+            catchError{retry(2){ build("tests-rhel7/provision-various-versions.feature")}},
+            catchError{retry(2){ build("tests-rhel7/proxy.feature")}}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
@@ -99,19 +99,19 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            //retry(2){ build("tests-win7/addon-xpaas.feature")},
-            retry(2){ build("tests-win7/basic.feature")},
-            retry(2){ build("tests-win7/cmd-addons.feature")},
-            retry(2){ build("tests-win7/cmd-config.feature")},
-            retry(2){ build("tests-win7/cmd-docker-env.feature")},
-            //retry(2){ build("tests-win7/cmd-image.feature")},
-            retry(2){ build("tests-win7/cmd-oc-env.feature")},
-            //retry(2){ build("tests-win7/cmd-openshift.feature")},
-            retry(2){ build("tests-win7/cmd-profile.feature")},
-            retry(2){ build("tests-win7/cmd-version.feature")},
-            retry(2){ build("tests-win7/flags.feature")},
-            retry(2){ build("tests-win7/provision-various-versions.feature")},
-            retry(2){ build("tests-win7/proxy.feature")}]
+            //catchError{retry(2){ build("tests-win7/addon-xpaas.feature")}},
+            catchError{retry(2){ build("tests-win7/basic.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-addons.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-config.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-docker-env.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-oc-env.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-openshift.feature")},
+            catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-win7/flags.feature")}},
+            catchError{retry(2){ build("tests-win7/provision-various-versions.feature")}},
+            catchError{retry(2){ build("tests-win7/proxy.feature")}}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
@@ -120,19 +120,19 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'FORK', value: "${FORK}"),
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
-            //retry(2){ build("tests-mac10/addon-xpaas.feature")},
-            //retry(2){ build("tests-mac10/basic.feature")},
-            retry(2){ build("tests-mac10/cmd-addons.feature")},
-            //retry(2){ build("tests-mac10/cmd-config.feature")},
-            retry(2){ build("tests-mac10/cmd-docker-env.feature")},
-            //retry(2){ build("tests-mac10/cmd-image.feature")},
-            retry(2){ build("tests-mac10/cmd-oc-env.feature")},
-            retry(2){ build("tests-mac10/cmd-openshift.feature")},
-            retry(2){ build("tests-mac10/cmd-profile.feature")},
-            retry(2){ build("tests-mac10/cmd-version.feature")},
-            retry(2){ build("tests-mac10/flags.feature")},
-            retry(2){ build("tests-mac10/provision-various-versions.feature")},
-            retry(2){ build("tests-mac10/proxy.feature")}]
+            //catchError{retry(2){ build("tests-mac10/addon-xpaas.feature")}},
+            //catchError{retry(2){ build("tests-mac10/basic.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-addons.feature")}},
+            //catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-docker-env.feature")}},
+            //catchError{retry(2){ build("tests-mac10/cmd-image.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-oc-env.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-openshift.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-profile.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-mac10/flags.feature")}},
+            catchError{retry(2){ build("tests-mac10/provision-various-versions.feature")}},
+            catchError{retry(2){ build("tests-mac10/proxy.feature")}}]
         }
     }
 }
@@ -155,22 +155,17 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         "PATH+MINISHIFT=${WORKSPACE}/minishift",
                         "GOPATH=${WORKSPACE}/go",
                         "FORK=${FORK}",
-                        "BRANCH=${BRANCH}",
-                        "MINISHIFT_CPUS=7",
-                        "MINISHIFT_MEMORY=12gb"
+                        "BRANCH=${BRANCH}"
                     ]){
                         debug_unix()
                         clean_unix()
                         prepare_unix()
                         script {
-                            sh '''
-                            minishift setup-cdk --force
-                            minishift start --cpus 7 --memory 12gb
-                            minishift delete --force
-                            '''
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
-                                retry(2) {
-                                    sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
+                                catchError {
+                                    retry(2) {
+                                        sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
+                                    }
                                 }
                             }
                         }
