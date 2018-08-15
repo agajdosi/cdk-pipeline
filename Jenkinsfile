@@ -162,10 +162,12 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         prepare_unix()
                         script {
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
-                                catchError {
+                                try {
                                     retry(2) {
                                         sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
                                     }
+                                } catch (error) {
+                                    echo "${error}"
                                 }
                             }
                         }
