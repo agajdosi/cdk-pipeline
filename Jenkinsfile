@@ -123,7 +123,7 @@ if (env.QUICK_TEST == "true") {
             //catchError{retry(2){ build("tests-mac10/addon-xpaas.feature")}},
             //catchError{retry(2){ build("tests-mac10/basic.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-addons.feature")}},
-            //catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
+            catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-docker-env.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-image.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-oc-env.feature")}},
