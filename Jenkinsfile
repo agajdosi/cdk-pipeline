@@ -20,7 +20,6 @@ def prepare_unix() {
     sh '''
     mkdir -p go/src/github.com/minishift go/bin go/pkg minishift
     sudo yum install golang -y
-    go get -u github.com/golang/dep/cmd/dep
 
     curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm -o minishift/docker-machine-driver-kvm
     chmod 755 minishift/docker-machine-driver-kvm
@@ -70,8 +69,9 @@ if (env.QUICK_TEST == "true") {
     cciRhelTags = [
         ['basic','cmd-oc-env','cmd-docker-env'],
         ['cmd-addons','cmd-openshift','experimental-flags'],
-        ['flags','provision-various-versions'],
-        ['proxy','cmd-config','cmd-version','setup-cdk']]
+        ['flags','provision-various-versions','cmd-profile'],
+        ['proxy','cmd-config','cmd-version','setup-cdk','cmd-image'],
+        ['addon-eap-cd','addon-registry-route','addon-xpaas']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
             retry(2){ build job: "tests-rhel7/_prepare", parameters:[
@@ -79,18 +79,19 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
             //catchError{retry(2){ build("tests-rhel7/addon-xpaas.feature")}},
-            catchError{retry(2){ build("tests-rhel7/basic.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-addons.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-config.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-docker-env.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-image.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-oc-env.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-openshift.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-profile.feature")}},
+            catchError{retry(3){ build("tests-rhel7/basic.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-addons.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-config.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-docker-env.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-image.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-oc-env.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-openshift.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/cmd-profile.feature")}},
             catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-rhel7/flags.feature")}},
-            catchError{retry(2){ build("tests-rhel7/provision-various-versions.feature")}},
-            catchError{retry(2){ build("tests-rhel7/proxy.feature")}}]
+            //catchError{retry(2){ build("tests-rhel7/flags.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/provision-various-versions.feature")}},
+            //catchError{retry(2){ build("tests-rhel7/proxy.feature")}},
+            catchError{retry(2){ build("tests-rhel7/setup-cdk.feature")}}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
@@ -101,17 +102,18 @@ if (env.QUICK_TEST == "true") {
             ]},
             //catchError{retry(2){ build("tests-win7/addon-xpaas.feature")}},
             catchError{retry(2){ build("tests-win7/basic.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-addons.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-config.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-addons.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-config.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-docker-env.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-oc-env.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-openshift.feature")},
-            catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
+            catchError{retry(2){ build("tests-win7/cmd-openshift.feature")},
+            //catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-win7/flags.feature")}},
-            catchError{retry(2){ build("tests-win7/provision-various-versions.feature")}},
-            catchError{retry(2){ build("tests-win7/proxy.feature")}}]
+            //catchError{retry(2){ build("tests-win7/flags.feature")}},
+            //catchError{retry(2){ build("tests-win7/provision-various-versions.feature")}},
+            catchError{retry(2){ build("tests-win7/proxy.feature")}},
+            catchError{retry(2){ build("tests-win7/setup-cdk.feature")}}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
@@ -123,16 +125,17 @@ if (env.QUICK_TEST == "true") {
             //catchError{retry(2){ build("tests-mac10/addon-xpaas.feature")}},
             //catchError{retry(2){ build("tests-mac10/basic.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-addons.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
+            //catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-docker-env.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-image.feature")}},
+            //catchError{retry(2){ build("tests-mac10/cmd-image.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-oc-env.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-openshift.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-profile.feature")}},
+            //catchError{retry(2){ build("tests-mac10/cmd-profile.feature")}},
             catchError{retry(2){ build("tests-mac10/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-mac10/flags.feature")}},
-            catchError{retry(2){ build("tests-mac10/provision-various-versions.feature")}},
-            catchError{retry(2){ build("tests-mac10/proxy.feature")}}]
+            //catchError{retry(2){ build("tests-mac10/flags.feature")}},
+            //catchError{retry(2){ build("tests-mac10/provision-various-versions.feature")}},
+            //catchError{retry(2){ build("tests-mac10/proxy.feature")}},
+            catchError{retry(2){ build("tests-mac10/setup-cdk.feature")}}]
         }
     }
 }
