@@ -107,7 +107,7 @@ if (env.QUICK_TEST == "true") {
             catchError{retry(2){ build("tests-win7/cmd-docker-env.feature")}},
             //catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-oc-env.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-openshift.feature")},
+            catchError{retry(2){ build("tests-win7/cmd-openshift.feature")}},
             //catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
             //catchError{retry(2){ build("tests-win7/flags.feature")}},
