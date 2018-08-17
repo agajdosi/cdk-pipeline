@@ -41,7 +41,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
             catchError{retry(2){ build("tests-rhel7/basic.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}}]
+            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-rhel7/setup-cdk.feature")}}]
         }
     }
     integrationTests["blr-win7-smoke"] = {
@@ -51,7 +52,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
             catchError{retry(2){ build("tests-win7/basic.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-version.feature")}}]
+            catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-win7/setup-cdk.feature")}}]
         }
     }
     integrationTests["blr-mac10-smoke"] = {
@@ -61,7 +63,8 @@ if (env.QUICK_TEST == "true") {
                 string(name: 'BRANCH', value: "${BRANCH}")
             ]},
             catchError{retry(2){ build("tests-mac10/basic.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}}]
+            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}},
+            catchError{retry(2){ build("tests-mac10/setup-cdk.feature")}}]
         }
     }
 // FULL TESTS
@@ -69,9 +72,9 @@ if (env.QUICK_TEST == "true") {
     cciRhelTags = [
         ['basic','cmd-oc-env','cmd-docker-env'],
         ['cmd-addons','cmd-openshift','experimental-flags'],
-        ['flags','provision-various-versions','cmd-profile'],
+        ['flags','provision-various-versions'], //cmd-profile not used because it needs 9GB of RAM (4gb instance + 5gb instance)
         ['proxy','cmd-config','cmd-version','setup-cdk','cmd-image'],
-        ['addon-eap-cd','addon-registry-route','addon-xpaas']]
+        ['addon-eap-cd','addon-registry-route']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke'){[
             retry(2){ build job: "tests-rhel7/_prepare", parameters:[
@@ -107,7 +110,7 @@ if (env.QUICK_TEST == "true") {
             catchError{retry(2){ build("tests-win7/cmd-docker-env.feature")}},
             //catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-oc-env.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-openshift.feature")}},
+            //catchError{retry(2){ build("tests-win7/cmd-openshift.feature")}},
             //catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
             catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
             //catchError{retry(2){ build("tests-win7/flags.feature")}},
