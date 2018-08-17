@@ -35,36 +35,48 @@ if (env.QUICK_TEST == "true") {
     cciRhelTags=[
         ['cmd-version','setup-cdk','basic']]
     integrationTests["blr-rhel7-smoke"] = {
-        stage('blr-rhel7-smoke'){[
-            retry(2){ build job: "tests-rhel7/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            catchError{retry(2){ build("tests-rhel7/basic.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-rhel7/setup-cdk.feature")}}]
+        stage('blr-rhel7-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-rhel7/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(2){ build("tests-rhel7/basic.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-rhel7/cmd-version.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-rhel7/setup-cdk.feature")}}catch(err){failedSteps += 1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
     integrationTests["blr-win7-smoke"] = {
-        stage('blr-win7-smoke'){[
-            retry(2){ build job: "tests-win7/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            catchError{retry(2){ build("tests-win7/basic.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-win7/setup-cdk.feature")}}]
+        stage('blr-win7-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-win7/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(2){ build("tests-win7/basic.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-win7/cmd-version.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-win7/setup-cdk.feature")}}catch(err){failedSteps += 1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
     integrationTests["blr-mac10-smoke"] = {
-        stage('blr-mac10-smoke'){[
-            retry(2){ build job: "tests-mac10/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            catchError{retry(2){ build("tests-mac10/basic.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}},
-            catchError{retry(2){ build("tests-mac10/setup-cdk.feature")}}]
+        stage('blr-mac10-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-mac10/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(2){ build("tests-mac10/basic.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-mac10/cmd-version.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){ build("tests-mac10/setup-cdk.feature")}}catch(err){failedSteps += 1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
 // FULL TESTS
@@ -76,69 +88,54 @@ if (env.QUICK_TEST == "true") {
         ['proxy','cmd-config','cmd-version','setup-cdk','cmd-image'],
         ['addon-eap-cd','addon-registry-route']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
     integrationTests["blr-rhel7-smoke"] = {
-        stage('blr-rhel7-smoke'){[
-            retry(2){ build job: "tests-rhel7/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            //catchError{retry(2){ build("tests-rhel7/addon-xpaas.feature")}},
-            catchError{retry(3){ build("tests-rhel7/basic.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-addons.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-config.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-docker-env.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-image.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-oc-env.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-openshift.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/cmd-profile.feature")}},
-            catchError{retry(2){ build("tests-rhel7/cmd-version.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/flags.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/provision-various-versions.feature")}},
-            //catchError{retry(2){ build("tests-rhel7/proxy.feature")}},
-            catchError{retry(2){ build("tests-rhel7/setup-cdk.feature")}}]
+        stage('blr-rhel7-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-rhel7/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(3){build("tests-rhel7/basic.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){build("tests-rhel7/cmd-version.feature")}}catch(err){failedSteps += 1}
+                try{retry(2){build("tests-rhel7/setup-cdk.feature")}}catch(err){failedSteps += 1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
     integrationTests["blr-win7-smoke"] = {
-        stage('blr-win7-smoke'){[
-            retry(2){ build job: "tests-win7/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            //catchError{retry(2){ build("tests-win7/addon-xpaas.feature")}},
-            catchError{retry(2){ build("tests-win7/basic.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-addons.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-config.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-docker-env.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-image.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-oc-env.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-openshift.feature")}},
-            //catchError{retry(2){ build("tests-win7/cmd-profile.feature")}},
-            catchError{retry(2){ build("tests-win7/cmd-version.feature")}},
-            //catchError{retry(2){ build("tests-win7/flags.feature")}},
-            //catchError{retry(2){ build("tests-win7/provision-various-versions.feature")}},
-            catchError{retry(2){ build("tests-win7/proxy.feature")}},
-            catchError{retry(2){ build("tests-win7/setup-cdk.feature")}}]
+        stage('blr-win7-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-win7/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(2){build("tests-win7/basic.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){build("tests-win7/cmd-docker-env.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){build("tests-win7/cmd-oc-env.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){build("tests-win7/cmd-version.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){build("tests-win7/proxy.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-win7/setup-cdk.feature")}}catch(err){failedSteps+=1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
     integrationTests["blr-mac10-smoke"] = {
-        stage('blr-mac10-smoke'){[
-            retry(2){ build job: "tests-mac10/_prepare", parameters:[
-                string(name: 'FORK', value: "${FORK}"),
-                string(name: 'BRANCH', value: "${BRANCH}")
-            ]},
-            //catchError{retry(2){ build("tests-mac10/addon-xpaas.feature")}},
-            //catchError{retry(2){ build("tests-mac10/basic.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-addons.feature")}},
-            //catchError{retry(2){ build("tests-mac10/cmd-config.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-docker-env.feature")}},
-            //catchError{retry(2){ build("tests-mac10/cmd-image.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-oc-env.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-openshift.feature")}},
-            //catchError{retry(2){ build("tests-mac10/cmd-profile.feature")}},
-            catchError{retry(2){ build("tests-mac10/cmd-version.feature")}},
-            //catchError{retry(2){ build("tests-mac10/flags.feature")}},
-            //catchError{retry(2){ build("tests-mac10/provision-various-versions.feature")}},
-            //catchError{retry(2){ build("tests-mac10/proxy.feature")}},
-            catchError{retry(2){ build("tests-mac10/setup-cdk.feature")}}]
+        stage('blr-mac10-smoke') {
+            script {
+                def failedSteps = 0
+                retry(2){ build job: "tests-mac10/_prepare", parameters:[
+                    string(name: 'FORK', value: "${FORK}"),
+                    string(name: 'BRANCH', value: "${BRANCH}")
+                ]}
+                try{retry(2){ build("tests-mac10/cmd-addons.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-mac10/cmd-docker-env.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-mac10/cmd-oc-env.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-mac10/cmd-openshift.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-mac10/cmd-version.feature")}}catch(err){failedSteps+=1}
+                try{retry(2){ build("tests-mac10/setup-cdk.feature")}}catch(err){failedSteps+=1}
+                if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
+            }
         }
     }
 }
@@ -167,14 +164,18 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         clean_unix()
                         prepare_unix()
                         script {
+                            def failedSteps = 0
                             for (int x = 0; x < cciRhelTags[a].size(); x++) {
                                 try {
                                     retry(2) {
                                         sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
                                     }
                                 } catch (error) {
-                                    echo "${error}"
+                                    failedSteps += 1
                                 }
+                            }
+                            if (failedSteps != 0) {
+                                error "Stage has failed on ${failedSteps} steps."
                             }
                         }
                     }
