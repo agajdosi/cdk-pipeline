@@ -82,10 +82,10 @@ if (env.QUICK_TEST == "true") {
 // FULL TESTS
 } else {
     cciRhelTags = [
-        ['basic','cmd-oc-env','cmd-docker-env'],
+        ['basic','cmd-oc-env','cmd-docker-env'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
         ['cmd-addons','cmd-openshift','experimental-flags'],
         ['flags','provision-various-versions'], //cmd-profile not used because it needs 9GB of RAM (4gb instance + 5gb instance)
-        ['proxy','cmd-config','cmd-version','setup-cdk','cmd-image'],
+        ['proxy','cmd-config','cmd-version','setup-cdk'], 
         ['addon-eap-cd','addon-registry-route']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke') {
