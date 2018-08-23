@@ -196,6 +196,7 @@ pipeline {
         string(defaultValue: 'master', description: 'Branch/Tag from where ISO should be build.', name: 'ISO_BRANCH')
         booleanParam(defaultValue: false, description: "To speed up things a little bit when it's needed...", name: 'QUICK_TEST')
         booleanParam(defaultValue: false, description: "Will skip the ISO and CDK builds and only run tests and binary upload.", name: 'SKIP_BUILD')
+        booleanParam(defaultValue: false, description: "Do not upload binaries to the artifact server.", name: 'SKIP_UPLOAD')
     }
     triggers {
         cron("H 18 * * 1-5")
@@ -256,10 +257,16 @@ pipeline {
 
         stage('PUBLISH ARTIFACTS') {
             steps {
-                build job: "cdk_upload_artifact", parameters: [
-                    string(name: 'buildType', value: "${BUILD_TYPE}"),
-                    string(name: 'releaseNumber', value: "${RELEASE_NAME}")
-                ]
+                script {
+                    if (env.SKIP_UPLOAD == "false") {
+                        build job: "cdk_upload_artifact", parameters: [
+                            string(name: 'buildType', value: "${BUILD_TYPE}"),
+                            string(name: 'releaseNumber', value: "${RELEASE_NAME}")
+                        ]
+                    } else {
+                        echo "CDK binaries upload skipped."
+                    }
+                }
             }
         }
     }
