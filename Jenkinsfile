@@ -85,7 +85,7 @@ if (env.QUICK_TEST == "true") {
         ['basic','cmd-oc-env','cmd-docker-env'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
         ['cmd-addons','cmd-openshift','experimental-flags'],
         ['flags','provision-various-versions'], //cmd-profile not used because it needs 9GB of RAM (4gb instance + 5gb instance)
-        ['proxy','cmd-config','cmd-version','setup-cdk'], 
+        ['cmd-config','cmd-version','setup-cdk'], //proxy not used because of bug with ocp 3.10
         ['addon-eap-cd','addon-registry-route']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke') {
@@ -114,7 +114,7 @@ if (env.QUICK_TEST == "true") {
                 try{retry(2){build("tests-win7/cmd-docker-env.feature")}}catch(err){failedSteps+=1}
                 try{retry(2){build("tests-win7/cmd-oc-env.feature")}}catch(err){failedSteps+=1}
                 try{retry(2){build("tests-win7/cmd-version.feature")}}catch(err){failedSteps+=1}
-                try{retry(2){build("tests-win7/proxy.feature")}}catch(err){failedSteps+=1}
+                //try{retry(2){build("tests-win7/proxy.feature")}}catch(err){failedSteps+=1}
                 try{retry(2){ build("tests-win7/setup-cdk.feature")}}catch(err){failedSteps+=1}
                 if (failedSteps != 0) {error "Stage has failed on ${failedSteps} steps."}
             }
