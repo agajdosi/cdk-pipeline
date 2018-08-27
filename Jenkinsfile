@@ -33,7 +33,7 @@ def prepare_unix() {
 // QUICK TESTS
 if (env.QUICK_TEST == "true") {
     cciRhelTags=[
-        ['cmd-version','setup-cdk','basic']]
+        [['cmd-version','setup-cdk','basic'],'part-1','rhel7']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke') {
             script {
@@ -82,11 +82,12 @@ if (env.QUICK_TEST == "true") {
 // FULL TESTS
 } else {
     cciRhelTags = [
-        ['basic','cmd-oc-env','cmd-docker-env'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
-        ['cmd-addons','cmd-openshift','experimental-flags'],
-        ['flags','provision-various-versions'], //cmd-profile not used because it needs 9GB of RAM (4gb instance + 5gb instance)
-        ['cmd-config','cmd-version','setup-cdk'], //proxy not used because of bug with ocp 3.10
-        ['addon-eap-cd','addon-registry-route']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
+        //[['godog tag','godog tag','godog tag'],'stage-name','slave-tag']
+        [['basic','cmd-oc-env','cmd-docker-env'],'part-1','rhel7'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
+        [['cmd-addons','cmd-openshift','experimental-flags'],'part-2','rhel7'],
+        [['profile','flags','provision-various-versions'],'part-3 (16gb slave)','rhel7-16gb'], //cmd-profile not used because it needs 9GB of RAM (4gb instance + 5gb instance)
+        [['cmd-config','cmd-version','setup-cdk'],'part-4','rhel7'], //proxy not used because of bug with ocp 3.10
+        [['addon-eap-cd','addon-registry-route'],'part-5','rhel7']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke') {
             script {
@@ -144,8 +145,8 @@ if (env.QUICK_TEST == "true") {
 for (int i = 0; i < cciRhelTags.size(); i++) {
     def a = i //to pass copy, not link
 
-    integrationTests["cci-rhel7-part${a}"] = {
-        node('rhel7') {
+    integrationTests["cci-rhel7-${cciRhelTags[a][1]}"] = {
+        node(cciRhelTags[a][2]) {
             stage("cci-rhel7-part-${a}") {
                 deleteDir()
                 withCredentials([
@@ -165,10 +166,10 @@ for (int i = 0; i < cciRhelTags.size(); i++) {
                         prepare_unix()
                         script {
                             def failedSteps = 0
-                            for (int x = 0; x < cciRhelTags[a].size(); x++) {
+                            for (int x = 0; x < cciRhelTags[a][0].size(); x++) {
                                 try {
                                     retry(2) {
-                                        sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][x]}"
+                                        sh "make --directory=\$GOPATH/src/github.com/minishift/minishift integration MINISHIFT_BINARY=\$(pwd)/minishift/minishift GODOG_OPTS=-tags=${cciRhelTags[a][0][x]}"
                                     }
                                 } catch (error) {
                                     failedSteps += 1
