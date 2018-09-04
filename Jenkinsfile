@@ -83,11 +83,11 @@ if (env.QUICK_TEST == "true") {
 } else {
     cciRhelTags = [
         //[['godog tag','godog tag','godog tag'],'stage-name','slave-tag']
-        [['basic','cmd-oc-env','cmd-docker-env'],'part-1','rhel7'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
+        [['addon-xpaas','cmd-oc-env','cmd-docker-env'],'part-1','rhel7'], //cmd-image not used due to https://issues.jboss.org/browse/CDK-292
         [['cmd-addons','cmd-openshift','experimental-flags'],'part-2','rhel7'],
         [['profile','generic-driver','provision-various-versions'],'part-3 (16gb slave)','rhel7-16gb'],
-        [['cmd-config','flags','cmd-version','setup-cdk'],'part-4','rhel7'], //proxy not used because of bug with ocp 3.10
-        [['addon-eap-cd','addon-registry-route'],'part-5','rhel7']] //addon-xpaas not used, needs to be resynced with upstream to stop failing
+        [['basic','cmd-config','flags','cmd-version','setup-cdk'],'part-4','rhel7'], //proxy not used because of bug with ocp 3.10
+        [['addon-eap-cd','addon-registry-route'],'part-5','rhel7']]
     integrationTests["blr-rhel7-smoke"] = {
         stage('blr-rhel7-smoke') {
             script {
